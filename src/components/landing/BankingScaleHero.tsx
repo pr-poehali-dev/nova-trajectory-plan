@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 
 interface StatItem {
   value: string;
@@ -19,23 +18,23 @@ interface DataPoint {
 
 const stats: StatItem[] = [
   {
-    value: "1 млрд+",
-    description: "Сообщений анализируется\nежедневно",
+    value: "94%",
+    description: "Точность распознавания\nназваний препаратов",
     delay: 0,
   },
   {
-    value: "99.9%",
-    description: "Точность определения\nтональности",
+    value: "1.8 сек",
+    description: "Среднее время\nответа на запрос",
     delay: 0.2,
   },
   {
-    value: "50+",
-    description: "Поддерживаемых\nязыков",
+    value: "30–50%",
+    description: "Снижение нагрузки\nна персонал аптеки",
     delay: 0.4,
   },
   {
-    value: "1000+",
-    description: "Организаций используют\nСинхроЛинк",
+    value: "100%",
+    description: "Успешное прохождение\nвсех сценариев теста",
     delay: 0.6,
   },
 ];
@@ -72,7 +71,7 @@ export const BankingScaleHero = () => {
   }, []);
 
   return (
-    <div className="w-full overflow-hidden bg-white">
+    <div className="w-full overflow-hidden bg-white" id="problem">
       <div className="mx-auto max-w-7xl px-8 py-24 pt-16">
         <div className="grid grid-cols-12 gap-5 gap-y-16">
           <div className="col-span-12 md:col-span-6 relative z-10">
@@ -85,7 +84,7 @@ export const BankingScaleHero = () => {
                   className="block whitespace-nowrap overflow-hidden relative z-10"
                   style={{ color: "#146e96" }}
                 >
-                  Доверие в масштабе
+                  Актуальность и проблематика
                 </motion.span>
                 <motion.span
                   initial={{ opacity: 0 }}
@@ -98,22 +97,34 @@ export const BankingScaleHero = () => {
             </div>
 
             <h2 className="text-[40px] font-normal leading-tight tracking-tight text-[#111A4A] mb-6">
-              Анализируем миллиарды разговоров ежедневно{" "}
+              Проблемы современного аптечного обслуживания{" "}
               <span className="opacity-40">
-                для самых требовательных команд и корпораций мира.
+                требуют интеллектуального технологического решения.
               </span>
             </h2>
 
-            <p className="text-lg leading-6 text-[#111A4A] opacity-60 mt-0 mb-6">
-              Как интеллектуальный слой для современных коммуникаций, мы предоставляем аналитику в реальном времени и распознавание эмоций через нашу продвинутую AI-платформу.
-            </p>
-
-            <button className="relative inline-flex justify-center items-center leading-4 text-center cursor-pointer whitespace-nowrap outline-none font-medium h-9 text-[#232730] bg-white/50 backdrop-blur-sm shadow-[0_1px_1px_0_rgba(255,255,255,0),0_0_0_1px_rgba(87,90,100,0.12)] transition-all duration-200 ease-in-out rounded-lg px-4 mt-5 text-sm group hover:shadow-[0_1px_2px_0_rgba(0,0,0,0.05),0_0_0_1px_rgba(87,90,100,0.18)]">
-              <span className="relative z-10 flex items-center gap-1">
-                Узнать больше о платформе
-                <ArrowRight className="w-4 h-4 -mr-1 transition-transform duration-150 group-hover:translate-x-1" />
-              </span>
-            </button>
+            <div className="space-y-4 mt-6 mb-8">
+              {[
+                { icon: "🏥", label: "Кадровый дефицит", text: "До 80% вакансий провизоров остаются незакрытыми" },
+                { icon: "⏳", label: "Перегрузка персонала", text: "Фармацевты тратят время на рутинные вопросы вместо консультаций" },
+                { icon: "🕐", label: "Очереди и ожидание", text: "Среднее время ожидания 10–20 минут снижает лояльность" },
+                { icon: "📈", label: "Рост онлайн-спроса", text: "Запросы о лекарствах выросли на 42% за последние годы" },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={isVisible ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.3 + i * 0.12 }}
+                  className="flex items-start gap-3 p-4 rounded-xl bg-[#f5f8fb] border border-[#e8eff5]"
+                >
+                  <span className="text-xl flex-shrink-0 mt-0.5">{item.icon}</span>
+                  <div>
+                    <span className="font-semibold text-[#111A4A] text-sm">{item.label}:</span>{" "}
+                    <span className="text-[#555] text-sm">{item.text}</span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           <div className="col-span-12 md:col-span-6">

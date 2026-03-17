@@ -1,198 +1,140 @@
-import { useState } from "react";
-import { CheckIcon } from "@radix-ui/react-icons";
-import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
-type PlanLevel = "starter" | "pro" | "enterprise";
-
-interface PricingFeature {
-  name: string;
-  included: PlanLevel | "all";
+interface ComparisonRow {
+  criterion: string;
+  apteka: string;
+  zdravcity: string;
+  bot: string;
+  highlight?: boolean;
 }
 
-interface PricingPlan {
-  name: string;
-  level: PlanLevel;
-  price: {
-    monthly: number;
-    yearly: number;
-  };
-  popular?: boolean;
-}
-
-const features: PricingFeature[] = [
-  { name: "Анализ разговоров в реальном времени", included: "starter" },
-  { name: "До 10 000 сообщений/месяц", included: "starter" },
-  { name: "Базовое определение тональности", included: "starter" },
-  { name: "Поддержка по email", included: "starter" },
-  { name: "Продвинутый эмоциональный интеллект", included: "pro" },
-  { name: "До 100 000 сообщений/месяц", included: "pro" },
-  { name: "Мультиязычная поддержка (50+ языков)", included: "pro" },
-  { name: "Приоритетная поддержка", included: "pro" },
-  { name: "Кастомное обучение AI модели", included: "enterprise" },
-  { name: "Безлимитные сообщения", included: "enterprise" },
-  { name: "Персональный менеджер", included: "enterprise" },
-  { name: "Поддержка 24/7 по телефону", included: "enterprise" },
-  { name: "Доступ к API", included: "all" },
-  { name: "Инструменты командной работы", included: "all" },
+const rows: ComparisonRow[] = [
+  {
+    criterion: "Понимание естественной речи (NLP)",
+    apteka: "❌ Нет",
+    zdravcity: "⚠️ Частичное",
+    bot: "✅ Полное (Natasha)",
+    highlight: true,
+  },
+  {
+    criterion: "Подбор аналогов по МНН",
+    apteka: "❌ Нет",
+    zdravcity: "❌ Нет",
+    bot: "✅ Есть",
+    highlight: true,
+  },
+  {
+    criterion: "Официальные инструкции (РЛС)",
+    apteka: "❌ Нет",
+    zdravcity: "⚠️ Частичное",
+    bot: "✅ Полные",
+  },
+  {
+    criterion: "Среднее время ответа",
+    apteka: "⏱ 4–6 сек",
+    zdravcity: "⏱ 5–10 сек",
+    bot: "⚡ 1.8 сек",
+    highlight: true,
+  },
+  {
+    criterion: "Работа 24/7",
+    apteka: "✅ Да",
+    zdravcity: "✅ Да",
+    bot: "✅ Да",
+  },
+  {
+    criterion: "Маршрутизация к фармацевту",
+    apteka: "❌ Нет",
+    zdravcity: "❌ Нет",
+    bot: "✅ Есть (323-ФЗ)",
+  },
+  {
+    criterion: "Соответствие законам РФ",
+    apteka: "⚠️ Частичное",
+    zdravcity: "⚠️ Частичное",
+    bot: "✅ Полное",
+    highlight: true,
+  },
 ];
-
-const plans: PricingPlan[] = [
-  {
-    name: "Старт",
-    price: { monthly: 2900, yearly: 29000 },
-    level: "starter",
-  },
-  {
-    name: "Про",
-    price: { monthly: 9900, yearly: 99000 },
-    level: "pro",
-    popular: true,
-  },
-  {
-    name: "Бизнес",
-    price: { monthly: 29900, yearly: 299000 },
-    level: "enterprise",
-  },
-];
-
-function shouldShowCheck(included: PricingFeature["included"], level: PlanLevel): boolean {
-  if (included === "all") return true;
-  if (included === "enterprise" && level === "enterprise") return true;
-  if (included === "pro" && (level === "pro" || level === "enterprise")) return true;
-  if (included === "starter") return true;
-  return false;
-}
 
 export function PricingSection() {
-  const [isYearly, setIsYearly] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<PlanLevel>("pro");
-
   return (
-    <section className="py-24 bg-background" id="pricing">
+    <section className="py-24 bg-[#fafafa]" id="results">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-[40px] font-normal leading-tight mb-4">Выберите тариф</h2>
+          <span className="text-sm font-mono uppercase text-[#146e96] tracking-widest">Сравнительный анализ</span>
+          <h2 className="text-[40px] font-normal leading-tight mt-3 mb-4">Сравнение с аналогами</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Начните работу с платформой коммуникационной аналитики СинхроЛинк. Все тарифы включают API доступ и инструменты командной работы.
+            Разработанный бот превосходит существующие решения по скорости и глубине интеллектуальной обработки на 30–40%.
           </p>
         </div>
 
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-secondary rounded-full p-1">
-            <button
-              type="button"
-              onClick={() => setIsYearly(false)}
-              className={cn(
-                "px-6 py-2 rounded-full text-lg transition-all",
-                !isYearly ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              Месячная
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsYearly(true)}
-              className={cn(
-                "px-6 py-2 rounded-full text-lg transition-all",
-                isYearly ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              Годовая
-              <span className="ml-2 text-sm text-[#156d95]">-17%</span>
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {plans.map((plan) => (
-            <button
-              key={plan.name}
-              type="button"
-              onClick={() => setSelectedPlan(plan.level)}
-              className={cn(
-                "relative p-8 rounded-2xl text-left transition-all border-2",
-                selectedPlan === plan.level
-                  ? "border-[#156d95] bg-[#156d95]/5"
-                  : "border-border hover:border-[#156d95]/50"
-              )}
-            >
-              {plan.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#156d95] text-white px-4 py-1 rounded-full text-sm">
-                  Популярный
-                </span>
-              )}
-              <div className="mb-6">
-                <h3 className="text-2xl font-medium mb-2">{plan.name}</h3>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-medium">
-                    {(isYearly ? plan.price.yearly : plan.price.monthly).toLocaleString("ru-RU")} ₽
-                  </span>
-                  <span className="text-lg text-muted-foreground">/{isYearly ? "год" : "мес"}</span>
-                </div>
-              </div>
-              <div
-                className={cn(
-                  "w-full py-3 px-6 rounded-full text-lg transition-all text-center",
-                  selectedPlan === plan.level ? "bg-[#156d95] text-white" : "bg-secondary text-foreground"
-                )}
-              >
-                {selectedPlan === plan.level ? "Выбран" : "Выбрать"}
-              </div>
-            </button>
-          ))}
-        </div>
-
-        <div className="border border-border rounded-2xl overflow-hidden bg-card">
+        {/* Comparison table */}
+        <div className="border border-border rounded-2xl overflow-hidden bg-white shadow-sm">
           <div className="overflow-x-auto">
-            <div className="min-w-[768px]">
-              <div className="flex items-center p-6 bg-secondary border-b border-border">
-                <div className="flex-1">
-                  <h3 className="text-xl font-medium">Возможности</h3>
+            <div className="min-w-[700px]">
+              {/* Header */}
+              <div className="grid grid-cols-4 bg-[#f0f4f8] border-b border-border">
+                <div className="p-5 font-semibold text-[#202020]">Критерий</div>
+                <div className="p-5 text-center font-semibold text-[#555]">
+                  <div className="text-sm uppercase tracking-wide text-[#888]">Аналог</div>
+                  Аптека.ру
                 </div>
-                <div className="flex items-center gap-8">
-                  {plans.map((plan) => (
-                    <div key={plan.level} className="w-24 text-center text-lg font-medium">
-                      {plan.name}
-                    </div>
-                  ))}
+                <div className="p-5 text-center font-semibold text-[#555]">
+                  <div className="text-sm uppercase tracking-wide text-[#888]">Аналог</div>
+                  ЗдравСити
+                </div>
+                <div className="p-5 text-center font-bold text-[#156d95] bg-[#156d95]/5 rounded-tr-2xl">
+                  <div className="text-sm uppercase tracking-wide text-[#146e96]/70">Наша разработка</div>
+                  МыЗаботаБот
                 </div>
               </div>
 
-              {features.map((feature, index) => (
-                <div
-                  key={feature.name}
-                  className={cn(
-                    "flex items-center p-6 transition-colors",
-                    index % 2 === 0 ? "bg-background" : "bg-secondary/30",
-                    feature.included === selectedPlan && "bg-[#156d95]/5"
-                  )}
+              {rows.map((row, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-30px" }}
+                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  className={`grid grid-cols-4 border-b border-border last:border-b-0 ${
+                    row.highlight ? "bg-[#f8fbff]" : ""
+                  }`}
                 >
-                  <div className="flex-1">
-                    <span className="text-lg">{feature.name}</span>
+                  <div className="p-5 text-[#202020] font-medium text-sm flex items-center">{row.criterion}</div>
+                  <div className="p-5 text-center text-[#555] text-sm flex items-center justify-center">{row.apteka}</div>
+                  <div className="p-5 text-center text-[#555] text-sm flex items-center justify-center">{row.zdravcity}</div>
+                  <div className={`p-5 text-center text-sm font-semibold flex items-center justify-center ${
+                    row.highlight ? "text-[#156d95] bg-[#156d95]/5" : "text-[#156d95] bg-[#156d95]/3"
+                  }`}>
+                    {row.bot}
                   </div>
-                  <div className="flex items-center gap-8">
-                    {plans.map((plan) => (
-                      <div key={plan.level} className="w-24 flex justify-center">
-                        {shouldShowCheck(feature.included, plan.level) ? (
-                          <div className="w-6 h-6 rounded-full bg-[#156d95] flex items-center justify-center">
-                            <CheckIcon className="w-4 h-4 text-white" />
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="mt-12 text-center">
-          <button className="bg-[#156d95] text-white px-[18px] py-[15px] rounded-full text-lg hover:rounded-2xl transition-all">
-            Начать с тарифа {plans.find((p) => p.level === selectedPlan)?.name}
-          </button>
+        {/* Bottom stats */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { value: "94%", label: "Точность распознавания препаратов", sub: "120 юнит-тестов пройдено" },
+            { value: "1.8 с", label: "Среднее время ответа", sub: "Быстрее аналогов в 3–5 раз" },
+            { value: "100%", label: "Успешных сценариев", sub: "30 респондентов, 100 запросов" },
+          ].map((stat, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.12 }}
+              className="bg-white border border-[#e5e5e5] rounded-2xl p-8 text-center shadow-sm"
+            >
+              <div className="text-5xl font-bold text-[#156d95] mb-2">{stat.value}</div>
+              <div className="font-semibold text-[#202020] mb-1">{stat.label}</div>
+              <div className="text-sm text-[#888]">{stat.sub}</div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

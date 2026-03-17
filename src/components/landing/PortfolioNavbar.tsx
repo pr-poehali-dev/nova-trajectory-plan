@@ -8,10 +8,10 @@ interface NavigationLink {
 }
 
 const navigationLinks: NavigationLink[] = [
-  { name: "Возможности", href: "#features" },
-  { name: "Тарифы", href: "#pricing" },
-  { name: "Решения", href: "#solutions" },
-  { name: "Ресурсы", href: "#resources" },
+  { name: "Актуальность", href: "#problem" },
+  { name: "Архитектура", href: "#architecture" },
+  { name: "Функции", href: "#features" },
+  { name: "Результаты", href: "#results" },
 ];
 
 export const PortfolioNavbar = () => {
@@ -53,9 +53,10 @@ export const PortfolioNavbar = () => {
           <div className="flex-shrink-0">
             <button
               onClick={() => handleLinkClick("#home")}
-              className="text-2xl font-bold text-foreground hover:text-primary transition-colors duration-200"
+              className="text-lg font-bold text-foreground hover:text-primary transition-colors duration-200"
             >
-              <span className="font-extrabold">СинхроЛинк</span>
+              <span className="font-extrabold">МыЗаботаБот</span>
+              <span className="text-[#156d95] ml-1">/ ПГУТИ 2026</span>
             </button>
           </div>
 
@@ -75,12 +76,14 @@ export const PortfolioNavbar = () => {
           </div>
 
           <div className="hidden md:block">
-            <button
-              onClick={() => handleLinkClick("#contact")}
-              className="bg-[#156d95] text-white px-[18px] rounded-full text-base font-semibold hover:bg-[#156d95]/90 transition-all duration-200 hover:rounded-2xl shadow-sm hover:shadow-md whitespace-nowrap leading-4 py-[15px]"
+            <a
+              href="https://t.me/MYZABOTABOT"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#156d95] text-white px-[18px] rounded-full text-base font-semibold hover:bg-[#156d95]/90 transition-all duration-200 hover:rounded-2xl shadow-sm hover:shadow-md whitespace-nowrap leading-4 py-[15px] inline-block"
             >
-              <span className="font-medium">Попробовать бесплатно</span>
-            </button>
+              <span className="font-medium">@MYZABOTABOT</span>
+            </a>
           </div>
 
           <div className="md:hidden">
@@ -115,12 +118,14 @@ export const PortfolioNavbar = () => {
                 </button>
               ))}
               <div className="pt-4 border-t border-border">
-                <button
-                  onClick={() => handleLinkClick("#contact")}
-                  className="w-full bg-[#156d95] text-white px-[18px] py-[15px] rounded-full text-base font-semibold hover:bg-[#156d95]/90 transition-all duration-200"
+                <a
+                  href="https://t.me/MYZABOTABOT"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#156d95] text-white px-[18px] py-[15px] rounded-full text-base font-semibold hover:bg-[#156d95]/90 transition-all duration-200 block text-center"
                 >
-                  <span>Попробовать бесплатно</span>
-                </button>
+                  <span>@MYZABOTABOT</span>
+                </a>
               </div>
             </div>
           </motion.div>

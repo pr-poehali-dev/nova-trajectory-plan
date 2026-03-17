@@ -1,186 +1,111 @@
-import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
-interface IntegrationApp {
+interface TechItem {
   name: string;
-  logo: string;
+  description: string;
+  color: string;
+  emoji: string;
 }
 
-interface IntegrationCarouselProps {
-  buttonText?: string;
-  buttonHref?: string;
-  title?: string;
-  subtitle?: string;
-  topRowApps?: IntegrationApp[];
-  bottomRowApps?: IntegrationApp[];
-}
-
-const defaultTopRowApps: IntegrationApp[] = [
-  { name: "Integration 1", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-389-Hc8XBOUI8vkVmIwWQZs33kxMF353Xj.png" },
-  { name: "Integration 2", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-407-eyikTTM6ccO0f4I7ZmNk5LpFI4EKOG.png" },
-  { name: "Integration 3", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-379-5hDaxwIw4LzjwXzWuorEXi7ESrGYl1.png" },
-  { name: "Integration 4", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-374-bp0RaoVnQI1JMqR9fjessWI8v33kLV.png" },
-  { name: "Integration 5", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-381-eKw7vkCp2Wq9hivZJaN1ERJdjCqR0d.png" },
-  { name: "Integration 6", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-401-F6mjMLGEZt4HAohKA889Z8Gf5fMzIw.png" },
-  { name: "Integration 7", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-403-HnBAGFYWgxxMGrH2PI45UorQOsQHFo.png" },
-  { name: "Integration 1", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-389-Hc8XBOUI8vkVmIwWQZs33kxMF353Xj.png" },
-  { name: "Integration 2", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-407-eyikTTM6ccO0f4I7ZmNk5LpFI4EKOG.png" },
-  { name: "Integration 3", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-379-5hDaxwIw4LzjwXzWuorEXi7ESrGYl1.png" },
-  { name: "Integration 4", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-374-bp0RaoVnQI1JMqR9fjessWI8v33kLV.png" },
-  { name: "Integration 5", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-381-eKw7vkCp2Wq9hivZJaN1ERJdjCqR0d.png" },
+const techStack: TechItem[] = [
+  { name: "Python 3.10+", description: "Основной язык разработки", color: "#3776ab", emoji: "🐍" },
+  { name: "aiogram 3.x", description: "Асинхронный Telegram фреймворк", color: "#2ca5e0", emoji: "✈️" },
+  { name: "Natasha NLP", description: "Обработка естественного языка", color: "#e8473f", emoji: "🧠" },
+  { name: "Telegram Bot API", description: "Пользовательский интерфейс", color: "#2ca5e0", emoji: "💬" },
+  { name: "FSM (машина состояний)", description: "Управление диалогами", color: "#5c6bc0", emoji: "⚙️" },
+  { name: "SQLite / 1С", description: "База знаний лекарств", color: "#0078d4", emoji: "🗄️" },
+  { name: "РЛС / Росздравнадзор", description: "Официальные источники данных", color: "#cc2222", emoji: "📋" },
 ];
 
-const defaultBottomRowApps: IntegrationApp[] = [
-  { name: "Integration 6", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-401-F6mjMLGEZt4HAohKA889Z8Gf5fMzIw.png" },
-  { name: "Integration 7", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-403-HnBAGFYWgxxMGrH2PI45UorQOsQHFo.png" },
-  { name: "Integration 1", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-389-Hc8XBOUI8vkVmIwWQZs33kxMF353Xj.png" },
-  { name: "Integration 2", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-407-eyikTTM6ccO0f4I7ZmNk5LpFI4EKOG.png" },
-  { name: "Integration 3", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-379-5hDaxwIw4LzjwXzWuorEXi7ESrGYl1.png" },
-  { name: "Integration 4", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-374-bp0RaoVnQI1JMqR9fjessWI8v33kLV.png" },
-  { name: "Integration 5", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-381-eKw7vkCp2Wq9hivZJaN1ERJdjCqR0d.png" },
-  { name: "Integration 6", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-401-F6mjMLGEZt4HAohKA889Z8Gf5fMzIw.png" },
-  { name: "Integration 7", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-403-HnBAGFYWgxxMGrH2PI45UorQOsQHFo.png" },
-  { name: "Integration 1", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-389-Hc8XBOUI8vkVmIwWQZs33kxMF353Xj.png" },
-  { name: "Integration 2", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-407-eyikTTM6ccO0f4I7ZmNk5LpFI4EKOG.png" },
-  { name: "Integration 3", logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoipsum-379-5hDaxwIw4LzjwXzWuorEXi7ESrGYl1.png" },
+const future: TechItem[] = [
+  { name: "Интеграция с 1С", description: "Остатки в реальном времени", color: "#f59e0b", emoji: "🔗" },
+  { name: "Голосовой ввод", description: "Для пожилых пользователей", color: "#10b981", emoji: "🎙️" },
+  { name: "OCR рецептов", description: "Распознавание фото рецептов", color: "#8b5cf6", emoji: "📷" },
+  { name: "Прогнозирование спроса", description: "Анализ истории запросов", color: "#ec4899", emoji: "📊" },
+  { name: "Голосовые ответы", description: "TTS для мобильных", color: "#06b6d4", emoji: "🔊" },
+  { name: "Web-интерфейс", description: "Панель управления аптекой", color: "#156d95", emoji: "🖥️" },
 ];
 
-export const IntegrationCarousel = ({
-  buttonText = "Все интеграции",
-  buttonHref = "#",
-  title = "Интегрируется со всем вашим стеком инструментов.",
-  subtitle = "Подключите СинхроЛинк к Slack, Zoom, Notion, Google Meet и десяткам других сервисов для бесшовного анализа коммуникаций.",
-  topRowApps = defaultTopRowApps,
-  bottomRowApps = defaultBottomRowApps,
-}: IntegrationCarouselProps) => {
-  const topRowRef = useRef<HTMLDivElement>(null);
-  const bottomRowRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let topAnimationId: number;
-    let bottomAnimationId: number;
-    let topPosition = 0;
-    let bottomPosition = 0;
-
-    const animateTopRow = () => {
-      if (topRowRef.current) {
-        topPosition -= 0.5;
-        if (Math.abs(topPosition) >= topRowRef.current.scrollWidth / 2) {
-          topPosition = 0;
-        }
-        topRowRef.current.style.transform = `translateX(${topPosition}px)`;
-      }
-      topAnimationId = requestAnimationFrame(animateTopRow);
-    };
-
-    const animateBottomRow = () => {
-      if (bottomRowRef.current) {
-        bottomPosition -= 0.65;
-        if (Math.abs(bottomPosition) >= bottomRowRef.current.scrollWidth / 2) {
-          bottomPosition = 0;
-        }
-        bottomRowRef.current.style.transform = `translateX(${bottomPosition}px)`;
-      }
-      bottomAnimationId = requestAnimationFrame(animateBottomRow);
-    };
-
-    topAnimationId = requestAnimationFrame(animateTopRow);
-    bottomAnimationId = requestAnimationFrame(animateBottomRow);
-
-    return () => {
-      cancelAnimationFrame(topAnimationId);
-      cancelAnimationFrame(bottomAnimationId);
-    };
-  }, []);
-
+export const IntegrationCarousel = () => {
   return (
-    <div className="w-full py-24 bg-white">
-      <div className="max-w-[680px] mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="flex flex-col items-center mb-20"
-        >
-          <div className="flex flex-col items-center gap-4">
-            <h2 className="text-[40px] leading-tight font-normal text-[#222222] text-center tracking-tight mb-0">
-              {title}
+    <section className="w-full py-24 overflow-hidden bg-white" id="features">
+      <div className="max-w-7xl mx-auto px-8 mb-16">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <span className="text-sm font-mono uppercase text-[#146e96] tracking-widest">Технологический стек</span>
+            <h2 className="text-[40px] font-normal leading-tight text-[#202020] tracking-tight mt-3">
+              Использованные технологии
             </h2>
-            <p className="text-lg leading-7 text-[#666666] text-center max-w-[600px] mt-2">
-              {subtitle}
+            <p className="text-lg text-[#666] mt-3 max-w-xl">
+              Лёгкие и эффективные инструменты без тяжёлых нейросетей — быстрый отклик, простое сопровождение.
             </p>
           </div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
-            className="flex gap-3 mt-6"
+          <a
+            href="https://t.me/MYZABOTABOT"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-[#156d95] text-white px-[18px] py-[15px] rounded-full text-base hover:rounded-2xl transition-all whitespace-nowrap flex-shrink-0"
           >
-            <a
-              href={buttonHref}
-              className="inline-block px-5 py-2.5 rounded-full bg-white text-[#222222] text-[15px] font-medium leading-6 text-center whitespace-nowrap transition-all duration-75 ease-out w-[182px] cursor-pointer hover:shadow-lg"
-              style={{
-                boxShadow: "0 -1px 0 0 rgb(181, 181, 181) inset, -1px 0 0 0 rgb(227, 227, 227) inset, 1px 0 0 0 rgb(227, 227, 227) inset, 0 1px 0 0 rgb(227, 227, 227) inset",
-                backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.06) 80%, rgba(255, 255, 255, 0.12))",
-              }}
-            >
-              {buttonText}
-            </a>
+            Попробовать бот
+          </a>
+        </div>
+      </div>
+
+      {/* Tech stack row */}
+      <div className="relative">
+        <div className="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+        <div className="overflow-hidden">
+          <motion.div
+            className="flex gap-4"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ duration: 30, ease: "linear", repeat: Infinity }}
+            style={{ width: "max-content" }}
+          >
+            {[...techStack, ...techStack].map((item, i) => (
+              <div
+                key={i}
+                className="flex-shrink-0 flex items-center gap-3 bg-white border border-[#e5e5e5] rounded-2xl px-6 py-4 shadow-sm"
+                style={{ minWidth: "240px" }}
+              >
+                <span className="text-3xl">{item.emoji}</span>
+                <div>
+                  <p className="font-semibold text-[#202020] text-sm">{item.name}</p>
+                  <p className="text-[#888] text-xs mt-0.5">{item.description}</p>
+                </div>
+              </div>
+            ))}
           </motion.div>
-        </motion.div>
-      </div>
-
-      <div className="h-[268px] -mt-6 mb-0 pb-0 relative overflow-hidden">
-        <div
-          ref={topRowRef}
-          className="flex items-start gap-6 absolute top-6 whitespace-nowrap"
-          style={{ willChange: "transform" }}
-        >
-          {[...topRowApps, ...topRowApps].map((app, index) => (
-            <div
-              key={`top-${index}`}
-              className="flex items-center justify-center w-24 h-24 rounded-3xl flex-shrink-0"
-              style={{
-                backgroundImage: "linear-gradient(rgb(255, 255, 255), rgb(252, 252, 252))",
-                boxShadow: "rgba(0, 0, 0, 0.04) 0px 0px 0px 1px, rgba(0, 0, 0, 0.04) 0px 1px 1px 0px, rgba(0, 0, 0, 0.04) 0px 3px 3px -1.4px, rgba(0, 0, 0, 0.04) 0px 6px 6px -3px, rgba(0, 0, 0, 0.04) 0px 12px 12px -6px, rgba(0, 0, 0, 0.04) 0px 12px 12px -12px",
-              }}
-            >
-              <img src={app.logo || "/placeholder.svg"} alt={app.name} className="w-9 h-9 block object-contain" />
-            </div>
-          ))}
-        </div>
-
-        <div
-          className="absolute top-0 right-0 bottom-0 w-60 h-[268px] z-10 pointer-events-none"
-          style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0), rgb(255, 255, 255))" }}
-        />
-
-        <div
-          className="absolute top-0 left-0 bottom-0 w-60 h-[268px] z-10 pointer-events-none"
-          style={{ backgroundImage: "linear-gradient(90deg, rgb(255, 255, 255), rgba(0, 0, 0, 0))" }}
-        />
-
-        <div
-          ref={bottomRowRef}
-          className="flex items-start gap-6 absolute top-[148px] whitespace-nowrap"
-          style={{ willChange: "transform" }}
-        >
-          {[...bottomRowApps, ...bottomRowApps].map((app, index) => (
-            <div
-              key={`bottom-${index}`}
-              className="flex items-center justify-center w-24 h-24 rounded-3xl flex-shrink-0"
-              style={{
-                backgroundImage: "linear-gradient(rgb(255, 255, 255), rgb(252, 252, 252))",
-                boxShadow: "rgba(0, 0, 0, 0.04) 0px 0px 0px 1px, rgba(0, 0, 0, 0.04) 0px 1px 1px 0px, rgba(0, 0, 0, 0.04) 0px 3px 3px -1.4px, rgba(0, 0, 0, 0.04) 0px 6px 6px -3px, rgba(0, 0, 0, 0.04) 0px 12px 12px -6px, rgba(0, 0, 0, 0.04) 0px 12px 12px -12px",
-              }}
-            >
-              <img src={app.logo || "/placeholder.svg"} alt={app.name} className="w-9 h-9 block object-contain" />
-            </div>
-          ))}
         </div>
       </div>
-    </div>
+
+      {/* Future row */}
+      <div className="relative mt-4">
+        <div className="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+        <div className="overflow-hidden">
+          <motion.div
+            className="flex gap-4"
+            animate={{ x: ["-50%", "0%"] }}
+            transition={{ duration: 35, ease: "linear", repeat: Infinity }}
+            style={{ width: "max-content" }}
+          >
+            {[...future, ...future].map((item, i) => (
+              <div
+                key={i}
+                className="flex-shrink-0 flex items-center gap-3 bg-[#f8f9fa] border border-dashed border-[#d0d0d0] rounded-2xl px-6 py-4"
+                style={{ minWidth: "240px" }}
+              >
+                <span className="text-3xl opacity-60">{item.emoji}</span>
+                <div>
+                  <p className="font-semibold text-[#555] text-sm">{item.name}</p>
+                  <p className="text-[#aaa] text-xs mt-0.5">Перспектива: {item.description}</p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+    </section>
   );
 };
